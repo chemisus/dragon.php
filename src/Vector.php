@@ -2,6 +2,10 @@
 class Vector implements ArrayAccess {
     private $items;
     
+    public function items() {
+        return $this->items;
+    }
+    
     public function __get($key) {
         return $this[$key];
     }

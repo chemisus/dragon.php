@@ -1,4 +1,15 @@
 <?php
+
+namespace dragon;
+
+use \Exception;
+use \strtoupper;
+use \array_shift;
+use \strtr;
+use \GLOB_BRACE;
+use \glob;
+use \range;
+
 class Autoloader {
     private $SRC;
     

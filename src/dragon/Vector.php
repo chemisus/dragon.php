@@ -1,4 +1,9 @@
 <?php
+
+namespace dragon;
+
+use \ArrayAccess;
+
 class Vector implements ArrayAccess {
     private $items;
     

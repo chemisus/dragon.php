@@ -1,6 +1,13 @@
 <?php
 
-class FileRoute {
+namespace dragon;
+
+use \preg_match;
+use \array_search;
+use \is_integer;
+use \strtr;
+
+class DefaultRoute {
     private $matches = array();
     
     private $methods;
@@ -19,30 +26,26 @@ class FileRoute {
         $this->translates = $translates;
     }
     
-    public function valid($PUBLIC, $PATH_INFO, $REQUEST_METHOD) {
-        if (!\preg_match($this->path, $PATH_INFO, $this->matches)) {
+    public function valid($PATH_INFO, $REQUEST_METHOD) {
+        if (!preg_match($this->path, $PATH_INFO, $this->matches)) {
             return false;
         }
 
-        if (\array_search(strtolower($REQUEST_METHOD), $this->methods->value(), true) === false) {
-            return false;
-        }
-        
-        $file = array_shift(\glob($PUBLIC.trim($this->matches['path'], '/'), \GLOB_BRACE));
-        
-        if (!$file || !\file_exists($file) || !\is_file($file)) {
+        if (array_search(strtolower($REQUEST_METHOD), $this->methods->value(), true) === false) {
             return false;
         }
         
         return true;
     }
     
-    public function parameters() {
-        $parameters = new Query($this->parameters->value());
+    public function parameters($QueryFactory) {
+        $parameters = $QueryFactory->invoke(array(
+            'value' => $this->parameters->value())
+        );
         
         // 2. get parameters
         foreach ($this->matches as $key=>$value) {
-            if (!\is_integer($key)) {
+            if (!is_integer($key)) {
                 $parameters[$key] = $value;
             }
         }
@@ -56,7 +59,7 @@ class FileRoute {
 
         // 4. translate parameters
         foreach ($this->translates as $key=>$value) {
-            $parameters[$key] = \strtr($value, $translates);
+            $parameters[$key] = strtr($value, $translates);
         }
         
         return $parameters;

@@ -3,6 +3,8 @@
 namespace Dragon;
 
 class FileRouter extends RouterTemplate {
+    private $file;
+    
     public function __construct($root, $config, RouterFactory $factory, Router $parent=null) {
         parent::__construct($config, $factory, $parent);
         
@@ -10,7 +12,11 @@ class FileRouter extends RouterTemplate {
     }
     
     protected function doProcess(Request $request, $path) {
-        if (!is_file($this->root.$request->path())) {
+        $pattern = '/'.trim($this->root, '/').'/'.trim($request->path(), '/');
+        
+        $this->file = array_shift(glob($pattern, GLOB_BRACE));
+        
+        if ($this->file === null) {
             return false;
         }
         
@@ -18,7 +24,7 @@ class FileRouter extends RouterTemplate {
     }
 
     protected function doRoute(Request $request) {
-        return new FileRoute($request);
+        return new FileRoute($request, $this->file);
     }
 
     public function length() {

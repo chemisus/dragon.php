@@ -20,7 +20,7 @@ class ControllerRoute implements Route {
     public function execute() {
         $parameters = $this->router->parameters();
         
-        $this->container->executeController(
+        return $this->container->executeController(
             $parameters['controller'],
             $parameters['action'],
             $this->router->parameters()

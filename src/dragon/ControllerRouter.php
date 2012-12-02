@@ -60,6 +60,12 @@ class ControllerRouter extends RouterTemplate {
             }
         }
         
+        foreach ($parameters as $key=>$value) {
+            if (is_integer($key)) {
+                unset($parameters[$key]);
+            }
+        }
+        
         return $parameters;
     }
     

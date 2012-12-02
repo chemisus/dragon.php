@@ -1,0 +1,35 @@
+{
+    "path": "[/]",
+    "routes": [
+        {
+            "path": "<controller,cms>/<type,*+>/<action,*+>/<id,#+>.<ext,*+>",
+            "page": {
+                "controller": "<controller>",
+                "action": "<action>"
+            }
+        },
+        {
+            "path": "<controller,*+>/",
+            "routes": [
+                {
+                    "path": "<action,*+>",
+                    "page": {
+                        "controller": "<controller>",
+                        "action": "<action>"
+                    }
+                }
+            ]
+        },
+        {
+            "path": "<action,@+>",
+            "page": {
+                "controller": "main",
+                "action": "<action>"
+            }
+        }
+    ],
+    "page": {
+        "controller": "main",
+        "action": "index"
+    }
+}

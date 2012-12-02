@@ -6,13 +6,35 @@ class ControllerRouter extends RouterTemplate {
     private $parameters;
 
     private $length;
+    
+    private $container;
 
     public function length() {
         return $this->length;
     }
 
-    public function doParameters() {
-        return $this->parameters;
+    public function doParameters($parameters) {
+        $parameters = array_merge($parameters, $this->parameters);
+        
+        $transforms = array();
+        
+        foreach ($parameters as $key=>$value) {
+            $transforms["<{$key}>"] = $value;
+        }
+        
+        if (isset($this->config()->values)) {
+            foreach ($this->config()->values as $key=>$value) {
+                $parameters[$key] = strtr($value, $transforms);
+            }
+        }
+        
+        return $parameters;
+    }
+    
+    public function __construct($config, RouterFactory $factory, Router $parent = null, ControllerContainer $container) {
+        parent::__construct($config, $factory, $parent);
+        
+        $this->container = $container;
     }
 
     public function pattern($pattern) {
@@ -48,8 +70,6 @@ class ControllerRouter extends RouterTemplate {
 
         $this->parameters = array();
 
-        echo "\n".$pattern."\n";
-        
         if (!preg_match('/^'.$pattern.'\/?/', $subject, $this->parameters)) {
             return false;
         }
@@ -60,10 +80,10 @@ class ControllerRouter extends RouterTemplate {
     }
 
     protected function doRoute(Request $request) {
-        if (!isset($this->config()->page)) {
+        if (!isset($this->config()->values)) {
             return false;
         }
 
-        return new ControllerRoute($this, $this->config());
+        return new ControllerRoute($this, $this->config(), $this->container);
     }
 }

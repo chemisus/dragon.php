@@ -2,26 +2,23 @@
 
 namespace Dragon;
 
-use \stdClass;
-use \Exception;
-
-require_once('src/dragon/Request.php');
-require_once('src/dragon/Route.php');
-require_once('src/dragon/Router.php');
-require_once('src/dragon/RouterFactory.php');
-
-require_once('src/dragon/RouterTemplate.php');
-
-require_once('src/dragon/ControllerRoute.php');
-require_once('src/dragon/ControllerRouter.php');
-require_once('src/dragon/ControllerRouterFactory.php');
-require_once('src/dragon/StandardRequest.php');
+require_once('Dragon.php');
 
 echo '<xmp>';
 
-$request = new StandardRequest($_SERVER['PATH_INFO'], $_SERVER['REQUEST_METHOD']);
+class Container implements ControllerContainer {
+    public function executeController($controller, $action, $parameters) {
+        echo $controller. ' ' . $action;
+    }
+}
 
-$factory = new ControllerRouterFactory();
+$request = new DefaultRequest($_SERVER['PATH_INFO'], $_SERVER['REQUEST_METHOD']);
+
+$factory = new ControllerRouterFactory(
+    new Container(),
+    'standard',
+    new FileRouterFactory()
+);
 
 $router = $factory->createRouter(json_decode(file_get_contents('config.json')));
 

@@ -2,7 +2,7 @@
 
 namespace Dragon;
 
-class StandardRequest implements Request {
+class DefaultRequest implements Request {
     private $path;
 
     private $method;

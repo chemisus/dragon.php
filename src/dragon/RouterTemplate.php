@@ -30,13 +30,7 @@ abstract class RouterTemplate implements Router {
     }
     
     public function parameters() {
-        $parameters = $this->doParameters();
-        
-        if ($this->parent() !== null) {
-            $parameters = array_merge($this->parent()->parameters(), $parameters);
-        }
-        
-        return $parameters;
+        return $this->doParameters($this->parent() !== null ? $this->parent()->parameters() : array());
     }
 
     public function __construct($config, RouterFactory $factory, Router $parent=null) {
@@ -65,9 +59,11 @@ abstract class RouterTemplate implements Router {
         return $this->doRoute($request);
     }
     
+    protected function doParameters($parameters) {
+        return $parameters;
+    }
+
     abstract protected function doRoute(Request $request);
     
     abstract protected function doProcess(Request $request, $path);
-    
-    abstract protected function doParameters();
 }

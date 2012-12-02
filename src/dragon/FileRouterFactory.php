@@ -4,24 +4,20 @@ namespace Dragon;
 
 use \Exception;
 
-class ControllerRouterFactory implements RouterFactory {
+class FileRouterFactory implements RouterFactory {
     private $next;
 
     private $key;
     
-    private $container;
-
-    public function __construct(ControllerContainer $container, $key='controller', RouterFactory $next = null) {
+    public function __construct($key='file', RouterFactory $next = null) {
         $this->key = $key;
 
         $this->next = $next;
-        
-        $this->container = $container;
     }
 
     public function createRouter($config, RouterFactory $factory = null, Router $parent=null) {
         if (!isset($config->type) || $config->type === $this->key) {
-            return new ControllerRouter($config, $factory !== null ? $factory : $this, $parent, $this->container);
+            return new FileRouter($config, $factory !== null ? $factory : $this, $parent);
         }
 
         if ($this->next !== null) {

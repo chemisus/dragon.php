@@ -3,7 +3,7 @@
     "routes": [
         {
             "path": "<controller,cms>/<type,*+>/<action,*+>/<id,#+>.<ext,*+>",
-            "page": {
+            "values": {
                 "controller": "<controller>",
                 "action": "<action>"
             }
@@ -13,7 +13,7 @@
             "routes": [
                 {
                     "path": "<action,*+>",
-                    "page": {
+                    "values": {
                         "controller": "<controller>",
                         "action": "<action>"
                     }
@@ -22,13 +22,13 @@
         },
         {
             "path": "<action,@+>",
-            "page": {
+            "values": {
                 "controller": "main",
                 "action": "<action>"
             }
         }
     ],
-    "page": {
+    "values": {
         "controller": "main",
         "action": "index"
     }

@@ -3,7 +3,13 @@
 namespace Dragon;
 
 class FileRoute implements Route {
+    private $request;
+    
+    public function __construct(Request $request) {
+        $this->request = $request;
+    }
+    
     public function execute() {
-        echo 'file';
+        echo 'downloading '.$this->request->path();
     }
 }

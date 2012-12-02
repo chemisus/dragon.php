@@ -2,6 +2,9 @@
     "path": "[/]",
     "routes": [
         {
+            "type": "file"
+        },
+        {
             "path": "<controller,cms>/<type,*+>/<action,*+>/<id,#+>.<ext,*+>",
             "values": {
                 "controller": "<controller>",

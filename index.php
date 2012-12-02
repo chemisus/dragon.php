@@ -17,7 +17,7 @@ $request = new DefaultRequest($_SERVER['PATH_INFO'], $_SERVER['REQUEST_METHOD'])
 $factory = new ControllerRouterFactory(
     new Container(),
     'standard',
-    new FileRouterFactory()
+    new FileRouterFactory(__DIR__)
 );
 
 $router = $factory->createRouter(json_decode(file_get_contents('config.json')));

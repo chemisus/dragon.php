@@ -9,15 +9,19 @@ class FileRouterFactory implements RouterFactory {
 
     private $key;
     
-    public function __construct($key='file', RouterFactory $next = null) {
+    private $root;
+    
+    public function __construct($root, $key='file', RouterFactory $next = null) {
         $this->key = $key;
+        
+        $this->root = $root;
 
         $this->next = $next;
     }
 
     public function createRouter($config, RouterFactory $factory = null, Router $parent=null) {
         if (!isset($config->type) || $config->type === $this->key) {
-            return new FileRouter($config, $factory !== null ? $factory : $this, $parent);
+            return new FileRouter($this->root, $config, $factory !== null ? $factory : $this, $parent);
         }
 
         if ($this->next !== null) {

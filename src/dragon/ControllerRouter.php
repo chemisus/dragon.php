@@ -12,24 +12,6 @@ class ControllerRouter extends RouterTemplate {
     public function length() {
         return $this->length;
     }
-
-    public function doParameters($parameters) {
-        $parameters = array_merge($parameters, $this->parameters);
-        
-        $transforms = array();
-        
-        foreach ($parameters as $key=>$value) {
-            $transforms["<{$key}>"] = $value;
-        }
-        
-        if (isset($this->config()->values)) {
-            foreach ($this->config()->values as $key=>$value) {
-                $parameters[$key] = strtr($value, $transforms);
-            }
-        }
-        
-        return $parameters;
-    }
     
     public function __construct($config, RouterFactory $factory, Router $parent = null, ControllerContainer $container) {
         parent::__construct($config, $factory, $parent);
@@ -63,6 +45,24 @@ class ControllerRouter extends RouterTemplate {
         return $pattern;
     }
 
+    protected function doParameters($parameters) {
+        $parameters = array_merge($parameters, $this->parameters);
+        
+        $transforms = array();
+        
+        foreach ($parameters as $key=>$value) {
+            $transforms["<{$key}>"] = $value;
+        }
+        
+        if (isset($this->config()->values)) {
+            foreach ($this->config()->values as $key=>$value) {
+                $parameters[$key] = strtr($value, $transforms);
+            }
+        }
+        
+        return $parameters;
+    }
+    
     protected function doProcess(Request $request, $path) {
         $pattern = $this->pattern($this->config()->path);
 

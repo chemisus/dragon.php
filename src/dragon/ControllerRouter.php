@@ -79,6 +79,14 @@ class ControllerRouter extends RouterTemplate {
         if (!preg_match('/^'.$pattern.'\/?/', $subject, $this->parameters)) {
             return false;
         }
+        
+        if (isset($this->config()->method)) {
+            $method = (array)$this->config()->method;
+            
+            if (array_search(strtolower($request->method()), $method, true) === false) {
+                return false;
+            }
+        }
 
         $this->length = strlen($this->parameters[0]);
 
